@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edumindnest | Global AI Educational Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.25);
+            --accent: #f59e0b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 960px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .top-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 20px;
+            flex-wrap: wrap; gap: 15px;
+        }
+
+        .brand-logo-wrapper { display: flex; align-items: center; gap: 12px; }
+        .logo-icon-box {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+        .logo-icon-svg { width: 24px; height: 24px; fill: none; stroke: #fff; stroke-width: 2; }
+        .brand-name { font-size: 1.5rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+        .brand-name span { background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .header-settings {
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(15, 23, 42, 0.6); padding: 6px 14px; border-radius: 14px; border: 1px solid var(--border);
+        }
+        .setting-item { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: var(--text-muted); }
+        .select-integrated { background: transparent; border: none; color: var(--text); font-size: 0.85rem; font-weight: 600; outline: none; cursor: pointer; }
+        .select-integrated option { background: var(--surface); color: var(--text); }
+
+        .btn-auth {
+            background: rgba(59, 130, 246, 0.15); color: var(--primary); border: 1px solid rgba(59, 130, 246, 0.4);
+            padding: 8px 18px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+        }
+        .btn-auth:hover { background: var(--primary); color: #fff; }
+
+        .hero-box { text-align: center; }
+        .badge-main {
+            display: inline-block; background: rgba(59, 130, 246, 0.15); color: var(--primary);
+            border: 1px solid rgba(59, 130, 246, 0.3); padding: 6px 16px; border-radius: 20px;
+            font-size: 0.85rem; font-weight: 600; margin-bottom: 15px;
+        }
+        .hero-title { font-size: 2.2rem; font-weight: 800; line-height: 1.3; margin-bottom: 15px; color: #fff; }
+        .hero-sub { color: var(--text-muted); font-size: 0.98rem; line-height: 1.6; max-width: 780px; margin: 0 auto 30px auto; }
+
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 35px; text-align: left; }
+        @media (max-width: 768px) { .features-grid { grid-template-columns: 1fr; } }
+        .feature-card { background: var(--bg); border: 1px solid var(--border); padding: 20px; border-radius: 16px; }
+        .feature-icon { font-size: 1.8rem; margin-bottom: 10px; display: block; }
+        .feature-h { font-weight: 700; font-size: 0.95rem; margin-bottom: 5px; color: #fff; }
+        .feature-p { color: var(--text-muted); font-size: 0.82rem; line-height: 1.4; }
+
+        .btn-primary-action {
+            background: var(--primary); color: white; border: none; padding: 16px 32px;
+            border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.2s ease;
+            width: 100%; box-shadow: 0 4px 15px var(--primary-glow);
+        }
+        .btn-primary-action:hover { background: #2563eb; transform: translateY(-2px); }
+
+        .setup-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 25px; margin-bottom: 25px; text-align: left; }
+        .setup-title { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 15px; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        @media (max-width: 600px) { .form-row, .form-row-3 { grid-template-columns: 1fr; } }
+
+        .form-group label { display: block; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 6px; }
+        .form-control { width: 100%; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 8px; font-size: 0.9rem; outline: none; }
+        .form-control:focus { border-color: var(--primary); }
+
+        .parent-role-options { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 5px; }
+        .role-btn {
+            background: var(--surface); border: 1px solid var(--border); padding: 10px 18px;
+            border-radius: 10px; font-size: 0.85rem; cursor: pointer; color: var(--text); transition: all 0.2s;
+        }
+        .role-btn.active { border-color: var(--primary); background: rgba(59, 130, 246, 0.15); color: var(--primary); font-weight: 700; }
+
+        .child-tab-bar { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .child-tab { background: var(--bg); border: 1px solid var(--border); padding: 8px 16px; border-radius: 8px; color: var(--text-muted); cursor: pointer; font-size: 0.85rem; font-weight: 600; }
+        .child-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        .portal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        @media (max-width: 768px) { .portal-grid { grid-template-columns: 1fr; } }
+
+        .portal-card {
+            background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 25px 15px;
+            text-align: center; cursor: pointer; transition: all 0.2s ease; position: relative;
+        }
+        .portal-card.locked { opacity: 0.5; cursor: not-allowed; border-style: dashed; }
+        .portal-card:not(.locked):hover { border-color: var(--primary); transform: translateY(-3px); }
+        .portal-card.completed { border-color: var(--success); background: rgba(16, 185, 129, 0.05); }
+
+        .status-pill { position: absolute; top: 12px; right: 12px; font-size: 0.7rem; padding: 4px 8px; border-radius: 6px; font-weight: 700; }
+        .pill-pending { background: rgba(245, 158, 11, 0.15); color: var(--accent); }
+        .pill-done { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .pill-lock { background: rgba(148, 163, 184, 0.15); color: var(--text-muted); }
+
+        .progress-bar { height: 8px; background: var(--bg); border-radius: 10px; margin-bottom: 25px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s ease; }
+
+        .question-card { background: var(--bg); border: 1px solid var(--border); padding: 30px; border-radius: 16px; text-align: left; }
+        .question-tag { font-size: 0.75rem; color: var(--accent); font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+        .question-title { font-size: 1.1rem; font-weight: 600; line-height: 1.5; margin-bottom: 20px; color: #fff; }
+
+        .option-btn {
+            display: block; width: 100%; text-align: left; background: var(--surface);
+            border: 1px solid var(--border); color: var(--text); padding: 14px 18px; margin-bottom: 10px;
+            border-radius: 10px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s ease;
+        }
+        .option-btn:hover { border-color: var(--primary); background: var(--surface-hover); transform: translateX(3px); }
+
+        /* TEASER & ÖZET KARTI */
+        .teaser-card {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 1) 0%, rgba(15, 23, 42, 1) 100%);
+            border: 2px solid var(--accent); border-radius: 20px; padding: 30px; margin-top: 25px; text-align: left;
+        }
+        .teaser-header { display: flex; align-items: center; gap: 10px; color: var(--accent); font-weight: 800; font-size: 1.1rem; margin-bottom: 15px; }
+        .teaser-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+        @media (max-width: 768px) { .teaser-grid { grid-template-columns: 1fr; } }
+
+        .teaser-box { background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border); padding: 15px; border-radius: 12px; }
+        .teaser-box-title { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; margin-bottom: 5px; }
+        .teaser-box-val { font-size: 0.95rem; color: #fff; font-weight: 700; }
+
+        /* KRİTİK NOKTA VE SİSTEM TESPİT KUTUSU (GÖRSELDEKİ BİLGİ ALANI) */
+        .critical-info-box {
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px dashed var(--accent);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 25px;
+        }
+        .critical-info-title {
+            color: var(--accent); font-size: 0.92rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+        }
+        .critical-info-list { list-style: none; color: var(--text); font-size: 0.85rem; line-height: 1.6; }
+        .critical-info-list li { margin-bottom: 6px; padding-left: 18px; position: relative; }
+        .critical-info-list li::before { content: "•"; position: absolute; left: 0; color: var(--accent); font-weight: bold; }
+
+        /* AYRI ÖDEME & KAYIT EKRANI (SEPARATE PAGE MODAL LOOK) */
+        .checkout-page-container {
+            background: var(--bg);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 35px;
+            margin-top: 30px;
+            text-align: left;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        .pricing-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        @media (max-width: 600px) { .pricing-cards { grid-template-columns: 1fr; } }
+
+        .price-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: left; cursor: pointer; transition: all 0.2s;
+        }
+        .price-card.selected { border-color: var(--primary); background: rgba(59, 130, 246, 0.1); }
+        .price-title { font-size: 0.9rem; font-weight: 700; color: #fff; }
+        .price-val { font-size: 1.4rem; font-weight: 800; color: var(--primary); margin: 6px 0; }
+        .price-desc { font-size: 0.78rem; color: var(--text-muted); }
+
+        .discount-badge { display: inline-block; background: rgba(16, 185, 129, 0.2); color: #10b981; font-size: 0.75rem; padding: 2px 8px; border-radius: 6px; font-weight: 700; margin-top: 4px; }
+
+        .report-card { background: var(--bg); border: 1px solid var(--success); border-radius: 16px; padding: 30px; margin-top: 25px; text-align: left; }
+        .report-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 15px; }
+        .report-h { font-size: 1.1rem; font-weight: 700; color: var(--success); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+
+        .chart-bar-bg { height: 12px; background: var(--bg); border-radius: 6px; overflow: hidden; margin-top: 8px; }
+        .chart-bar-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #10b981); width: 0%; transition: width 0.6s ease; }
+
+        .history-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .compare-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .compare-table th, .compare-table td { border: 1px solid var(--border); padding: 10px; text-align: left; font-size: 0.85rem; }
+        .compare-table th { background: var(--bg); color: var(--primary); }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- HEADER: SADECE DİL SEÇİMİ VE GİRİŞ YAP BUTONU -->
+    <div class="top-bar">
+        <div class="brand-logo-wrapper">
+            <div class="logo-icon-box">
+                <svg class="logo-icon-svg" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+            </div>
+            <div class="brand-name">Edu<span>mindnest</span></div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="header-settings">
+                <div class="setting-item">
+                    <span>🌐</span>
+                    <select class="select-integrated" id="langSelect">
+                        <option value="tr">Türkçe</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn-auth" id="btnAuth" onclick="alert('Giriş yapmak için lütfen önce analizinizi tamamlayıp ödeme aşamasında hesabınızı oluşturunuz.');">Giriş Yap</button>
+        </div>
+    </div>
+
+    <!-- SADE & ODAKLI ANA SAYFA (HERO) -->
+    <div id="heroSection" class="hero-box">
+        <span class="badge-main">Çapraz Aile & Mizaç Teşhis Platformu</span>
+        <h1 class="hero-title">Çocuğunuzun Mizaç ve Potansiyelini Aile İçi Çapraz Analizle Keşfedin</h1>
+        <p class="hero-sub">Anne, baba ve öğrencinin bakış açılarını ayrı ayrı dinliyoruz. Evdeki iletişim krizlerini ve öğrencinin gizli yeteneklerini bilimsel mizaç modeliyle ortaya çıkarıyoruz.</p>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">👩‍👨‍👧</span>
+                <div class="feature-h">Çapraz Algı Analizi</div>
+                <div class="feature-p">Anne ve babanın çocukla ilgili algı farklarını tespit ederek evdeki krizleri kaynağında çözer.</div>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🎯</span>
+                <div class="feature-h">Yatkınlık & Mizaç Tespiti</div>
+                <div class="feature-p">Öğrencinin tutku duyduğu alanları (Uzay, Yazılım, Sanat vb.) tespit edip ders çalışma motivasyonuna dönüştürür.</div>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">📊</span>
+                <div class="feature-h">Sistem İçi Canlı Takip</div>
+                <div class="feature-p">Raporlarınız sisteminizde saklanır, geçmiş dönem raporlarıyla karşılaştırılıp gelişim takibi yapılır.</div>
+            </div>
+        </div>
+
+        <button type="button" class="btn-primary-action" id="btnStartFlow" style="max-width: 380px;">Analiz Portalına Giriş Yap</button>
+    </div>
+
+    <!-- PORTAL VE AİLE YAPISI -->
+    <div id="portalSection" class="hidden">
+
+        <div class="setup-card">
+            <div class="setup-title">👨‍‍👩‍👧‍👦 Analiz Yapısı ve Öğrenci Bilgileri</div>
+
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label>Analize katılacak ebeveyn yapısını seçiniz:</label>
+                <div class="parent-role-options" id="parentRoleGroup">
+                    <button type="button" class="role-btn active" data-mode="both">👩‍👨 Anne ve Baba (Ayrı Ayrı Modül) - En Derin Analiz 🎯</button>
+                    <button type="button" class="role-btn" data-mode="single">👤 Tek Ebeveyn / Yasal Vasi</button>
+                </div>
+            </div>
+
+            <!-- KİŞİSELLEŞTİRME: ÇOCUK BİLGİLERİ INPUT'LARI -->
+            <div class="form-row-3">
+                <div class="form-group">
+                    <label>Öğrencinin Adı:</label>
+                    <input type="text" class="form-control" id="childNameInput" value="Ahmet" placeholder="Örn: Ahmet">
+                </div>
+                <div class="form-group">
+                    <label>Öğrencinin Yaşı:</label>
+                    <input type="number" class="form-control" id="childAgeInput" value="13" placeholder="Örn: 13">
+                </div>
+                <div class="form-group">
+                    <label>Sınıf Düzeyi:</label>
+                    <select class="form-control" id="childGradeInput">
+                        <option value="İlkokul (1-4)">İlkokul (1-4. Sınıf)</option>
+                        <option value="Ortaokul (5-8)" selected>Ortaokul (5-8. Sınıf)</option>
+                        <option value="Lise (9-12)">Lise (9-12. Sınıf)</option>
+                        <option value="Üniversite Hazırlık">Üniversite Hazırlık / Mezun</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Toplam Çocuk Sayınız:</label>
+                    <select class="form-control" id="totalChildrenSelect">
+                        <option value="1">1 Çocuk</option>
+                        <option value="2">2 Çocuk</option>
+                        <option value="3">3 Çocuk</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Analiz Edilecek Çocuk Sayısı:</label>
+                    <select class="form-control" id="activeAnalyzeCount">
+                        <option value="1">1 Çocuk</option>
+                        <option value="2">2 Çocuk (%25 Ek Kardeş İndirimi)</option>
+                        <option value="3">3 Çocuk (%25 Ek Kardeş İndirimi)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÇOKLU ÇOCUK SEÇİM SEKMELERİ -->
+        <div id="childTabBar" class="child-tab-bar hidden">
+            <div class="child-tab active" data-child="1" id="tabChild1">1. Çocuk Analizi</div>
+            <div class="child-tab" data-child="2" id="tabChild2">2. Çocuk Analizi</div>
+            <div class="child-tab" data-child="3" id="tabChild3">3. Çocuk Analizi</div>
+        </div>
+
+        <!-- 3'LÜ MODÜL KARTLARI -->
+        <div class="portal-grid">
+            <div class="portal-card" id="cardAnne">
+                <span class="status-pill pill-pending" id="statusAnne">BEKLİYOR</span>
+                <span style="font-size: 2.2rem; display: block; margin-bottom: 8px;">👩</span>
+                <div style="font-weight: 700; font-size: 1rem; margin-bottom: 4px; color:#fff;" id="titleAnne">Anne Modülü</div>
+                <div style="color: var(--text-muted); font-size: 0.8rem;">12 Derin Analiz Sorusu</div>
+            </div>
+
+            <div class="portal-card" id="cardBaba">
+                <span class="status-pill pill-pending" id="statusBaba">BEKLİYOR</span>
+                <span style="font-size: 2.2rem; display: block; margin-bottom: 8px;">👨</span>
+                <div style="font-weight: 700; font-size: 1rem; margin-bottom: 4px; color:#fff;" id="titleBaba">Baba Modülü</div>
+                <div style="color: var(--text-muted); font-size: 0.8rem;">12 Derin Analiz Sorusu</div>
+            </div>
+
+            <div class="portal-card locked" id="cardOgrenci">
+                <span class="status-pill pill-lock" id="statusOgrenci">KİLİTLİ 🔒</span>
+                <span style="font-size: 2.2rem; display: block; margin-bottom: 8px;">🎓</span>
+                <div style="font-weight: 700; font-size: 1rem; margin-bottom: 4px; color:#fff;" id="titleOgrenci">Öğrenci Modülü</div>
+                <div style="color: var(--text-muted); font-size: 0.8rem;">(Ebeveyn Tamamlandıktan Sonra)</div>
+            </div>
+        </div>
+
+        <!-- TEASER (MİZAÇ ÖZET AYNASI) & EK KRİTİK BİLGİ ALANI -->
+        <div id="teaserResultCard" class="teaser-card hidden">
+            <div class="teaser-header">
+                <span>🪞</span> <span id="teaserHeaderTitle">Teşhis Tamamlandı! Mizaç Özet Aynanız Hazır.</span>
+            </div>
+            
+            <!-- ÖDEME ÖNCESİ KÜÇÜK ÖZET AYNA -->
+            <div class="teaser-grid">
+                <div class="teaser-box">
+                    <div class="teaser-box-title">BASKIN MİZAÇ TİPİ</div>
+                    <div class="teaser-box-val" id="teaserTemperamentType" style="color: #10b981;">Hesaplanıyor...</div>
+                </div>
+                <div class="teaser-box">
+                    <div class="teaser-box-title">EBEVEYN - ÖĞRENCİ UYUMU</div>
+                    <div class="teaser-box-val" id="calculatedConflictText" style="color: #f59e0b;">Hesaplanıyor...</div>
+                </div>
+                <div class="teaser-box">
+                    <div class="teaser-box-title">BASKIN YETENEK ALANI</div>
+                    <div class="teaser-box-val" id="calculatedSubjectText" style="color: #60a5fa;">Hesaplanıyor...</div>
+                </div>
+            </div>
+
+            <!-- EKLENEN KRİTİK NOKTA BİLGİ KUTUSU (GÖRSEL DESTEKLİ) -->
+            <div class="critical-info-box">
+                <div class="critical-info-title">
+                    <span>⚠️</span> Analiz Raporu Ön Kritik Noktaları & Sistem Tespitleri
+                </div>
+                <ul class="critical-info-list">
+                    <li><b>İletişim & Algı Farkı:</b> Ebeveynlerin beklentisi ile öğrencinin kendi potansiyel algısı arasında dönemsel sapma tespit edilmiştir.</li>
+                    <li><b>Gelişim Odak Nedenleri:</b> Çocuğun isteksizlik olarak görülen davranışları aslında yanlış mizaç yönlendirmesinden kaynaklanmaktadır.</li>
+                    <li><b>Rapor Koruması:</b> Tam raporunuz ve 54 haftalık gelişim planınız ödeme sonrasında doğrudan hesabınıza tanımlanıp güvenle saklanacaktır.</li>
+                </ul>
+            </div>
+
+            <!-- ÖDEME ADIMINA GEÇİŞ BUTONU -->
+            <div style="text-align: center;">
+                <button type="button" class="btn-primary-action" id="btnGoToCheckoutPage" style="max-width: 500px; background: #10b981;">
+                    🔒 Raporu Aç ve Ödeme / Kayıt Adımına İlerle ➔
+                </button>
+            </div>
+        </div>
+
+        <!-- MODÜLDEN AYRI ÖDEME VE KAYIT EKRANI -->
+        <div id="checkoutPageSection" class="checkout-page-container hidden">
+            <div style="border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px;">
+                <h2 style="font-size: 1.4rem; color: #fff; font-weight: 800;">💳 Rapor Erişim, Kayıt ve Ödeme Sayfası</h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Sistemimize kaydolarak raporunuzu süresiz olarak kaydedebilir ve gelişimini takip edebilirsiniz.</p>
+            </div>
+
+            <div class="pricing-cards">
+                <div class="price-card selected" id="pkgSingle">
+                    <div class="price-title">Tek Seferlik Rapor + Sistem Kaydı</div>
+                    <div class="price-val" id="valSingle">₺350</div>
+                    <div class="price-desc">Anlık detaylı mizaç raporu + Sistemde sınırsız erişim.</div>
+                </div>
+                <div class="price-card" id="pkgSub">
+                    <div class="price-title">Aylık Abonelik (54 Hafta Takip)</div>
+                    <div class="price-val" id="valSub">₺250 <span style="font-size:0.75rem; color:var(--text-muted);">/ ay</span></div>
+                    <div class="price-desc">54 haftalık dinamik takvim + Karşılaştırmalı Rapor Paneli.</div>
+                    <span class="discount-badge" id="discountInfoBadge">1. Çocuk Standart</span>
+                </div>
+            </div>
+
+            <!-- KAYIT BİLGİLERİ (ÖDEME AŞAMASINDA) -->
+            <div style="background: var(--surface); padding: 20px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px;">
+                <div style="font-weight: 800; color: #fff; font-size: 1rem; margin-bottom: 12px;">📝 Hesabınızı Oluşturun</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>E-Posta Adresiniz (Giriş İçin)</label>
+                        <input type="email" class="form-control" id="regEmail" placeholder="ornek@email.com" value="veli@edumindnest.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Hesap Şifreniz</label>
+                        <input type="password" class="form-control" id="regPass" value="12345678">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ÖDEME FORMU SIMÜLASYONU -->
+            <div style="background: var(--surface); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+                <div style="font-weight: 800; color: #fff; font-size: 1rem; margin-bottom: 12px;">💳 Kart İle Ödeme</div>
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label>Kart Üzerindeki İsim</label>
+                    <input type="text" class="form-control" placeholder="Ahmet Yılmaz" id="cardName" value="Salih Aytekin">
+                </div>
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label>Kart Numarası</label>
+                    <input type="text" class="form-control" placeholder="4543 **** **** 1234" maxlength="19" value="4543 0000 0000 1234">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Son Kullanma</label>
+                        <input type="text" class="form-control" placeholder="MM/YY" value="12/28">
+                    </div>
+                    <div class="form-group">
+                        <label>CVC</label>
+                        <input type="text" class="form-control" placeholder="123" value="999">
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn-primary-action" id="btnCompletePayment" style="background: #10b981; margin-top: 20px;">
+                🔒 Kaydol, Ödemeyi Onayla ve Raporu Kaydet
+            </button>
+        </div>
+
+        <!-- ÖDEME SONRASI CANLI RAPOR VE GEÇMİŞ PANELİ -->
+        <div id="fullReportSection" class="report-card hidden">
+            <div style="text-align: center; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px;">
+                <span style="font-size: 2.5rem; display: block; margin-bottom: 5px;">🎉</span>
+                <h2 style="color: #fff; font-weight: 800; font-size: 1.6rem;" id="reportMainTitle">Edumindnest™ Mizaç ve Gelişim Raporu</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem;" id="reportMainSub">Sistemde Kayıtlı Aktif Rapor</p>
+            </div>
+
+            <div class="report-section">
+                <div class="report-h">🧩 1. Mizaç ve Baskın Öğrenme Tipi</div>
+                <p style="color: var(--text); font-size: 0.9rem; line-height: 1.6;" id="reportTemperamentDesc">
+                    Öğrencinin yanıtları incelendiğinde **Analitik ve Keşif Odaklı** mizaç yapısı ön plana çıkmaktadır.
+                </p>
+            </div>
+
+            <div class="report-section">
+                <div class="report-h">⚠️ 2. Aile İçi Algı Farkları ve Kriz Alanları</div>
+                <p style="color: var(--text); font-size: 0.9rem; line-height: 1.6;" id="reportConflictDesc">
+                    Ebeveynlerin ve öğrencinin bakış açıları arasındaki dijital uyum grafiği:
+                </p>
+                <div style="margin-top: 10px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted);">
+                        <span>Uyum Skoru</span>
+                        <span id="reportMatchScoreText">%75</span>
+                    </div>
+                    <div class="chart-bar-bg"><div class="chart-bar-fill" id="reportMatchBar"></div></div>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <div class="report-h">🎓 3. Yatkın Olunan Akademik Alanlar & Meslekler</div>
+                <div style="background: var(--bg); padding: 12px; border-radius: 8px; color: #fff; font-weight: 700; margin-top: 8px;" id="reportSubjectList">
+                    🚀 Yazılım, Yapay Zeka, Uzay Bilimleri ve Mantıksal Tasarım
+                </div>
+            </div>
+
+            <div class="report-section">
+                <div class="report-h">📅 4. 54 Haftalık Aksiyon Planı ve AI Koç Tavsiyesi</div>
+                <ul style="color: var(--text-muted); font-size: 0.88rem; padding-left: 20px; line-height: 1.8;" id="reportActionPlanList">
+                    <li><strong>Hafta 1-4:</strong> Evdeki ders çalışma sürelerini 25 dk çalışma + 5 dk mola (Pomodoro) düzenine geçirin.</li>
+                    <li><strong>Hafta 5-12:</strong> Öğrencinin ilgi duyduğu derslerde proje bazlı küçük hedefler koyun.</li>
+                </ul>
+            </div>
+
+            <!-- SİSTEM İÇİ GEÇMİŞ RAPORLAR VE KARŞILAŞTIRMA MODÜLÜ -->
+            <div class="report-section" style="border-color: var(--primary);">
+                <div class="report-h" style="color: var(--primary);">📚 5. Sistemde Kayıtlı Geçmiş Raporlar & Gelişim Karşılaştırması</div>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">
+                    Öğrencinizin zaman içindeki gelişimini takip etmek için önceki raporları inceleyebilir veya mevcut raporla karşılaştırabilirsiniz.
+                </p>
+                
+                <div id="historyReportsList">
+                    <!-- JS ile Dinamik Doldurulur -->
+                </div>
+
+                <button type="button" class="btn-primary-action" id="btnCompareReports" style="margin-top: 10px; background: rgba(59, 130, 246, 0.2); border: 1px solid var(--primary); color: var(--primary);">
+                    🔄 Geçmiş Dönem Raporları Karşılaştır (Fark Analizi)
+                </button>
+
+                <div id="compareResultView" class="hidden" style="margin-top: 15px;">
+                    <h4 style="color:#fff; font-size:0.95rem; margin-bottom:8px;">📊 Dönemsel Gelişim ve Fark Tablosu</h4>
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>Metrik / Alan</th>
+                                <th>Önceki Analiz (01.03.2026)</th>
+                                <th>Mevcut Analiz (Güncel)</th>
+                                <th>Değişim & Fark</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Aile Uyum Skoru</td>
+                                <td>%60</td>
+                                <td id="cmpMatchNow">%75</td>
+                                <td style="color:var(--success); font-weight:700;">+%15 İyileşme 📈</td>
+                            </tr>
+                            <tr>
+                                <td>Ders Odaklanma Süresi</td>
+                                <td>15 Dakika</td>
+                                <td>30 Dakika</td>
+                                <td style="color:var(--success); font-weight:700;">+15 Dk Artış 📈</td>
+                            </tr>
+                            <tr>
+                                <td>Baskın Yatkınlık</td>
+                                <td>Genel Oyun/Teknoloji</td>
+                                <td id="cmpSubjectNow">Yazılım & Yapay Zeka</td>
+                                <td style="color:var(--primary); font-weight:700;">Odağa Dönüştü 🎯</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button type="button" class="btn-primary-action" onclick="window.print();" style="flex:1; background: var(--surface-hover); border: 1px solid var(--border);">
+                    🖨️ Raporu PDF / Yazıcı Formatında İndir
+                </button>
+                <button type="button" class="btn-primary-action" onclick="alert('Raporunuz profilinize kaydedildi. Dilediğiniz zaman giriş yaparak erişebilirsiniz.');" style="flex:1; background: var(--primary);">
+                    💾 Profilime Kaydet ve Çık
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- QUIZ -->
+    <div id="quizSection" class="hidden">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+        <div class="question-card">
+            <span class="question-tag" id="qTag">Soru Tag</span>
+            <div class="question-title" id="qTitle">Soru yükleniyor...</div>
+            <div id="qOptions"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    var parentMode = 'both';
+    var activeKidsCount = 1;
+    var statusState = { anneDone: false, babaDone: false, ogrenciDone: false };
+    var activeModule = '';
+    var qIndex = 0;
+
+    var userAnswers = { anne: [], baba: [], ogrenci: [] };
+
+    // Soru Bankası
+    var questionBank = {
+        anne: [
+            { tag: "ANNE | 1. ODAKLANMA", text: "Çocuğunuz evde ders masasına oturduğunda dikkati ne kadar süre dağılmadan kalır?", options: [{txt: "5-10 dakika sonra sıkılır kalkar", val: 1}, {txt: "20-30 dakika odaklanıp mola verir", val: 2}, {txt: "Sevdiği dersse saatlerce kalkmaz", val: 3}, {txt: "Sadece yanımda durursam odaklanır", val: 2}] },
+            { tag: "ANNE | 2. TEPKİ", text: "Ödev veya sorumluluk hatırlatıldığında tepkisi ne olur?", options: [{txt: "İtiraz eder, ertelemek ister", val: 1}, {txt: "Sessizce dinler ama hemen yapmaz", val: 2}, {txt: "Tamam der ve planına göre yapar", val: 3}, {txt: "Öfkelenir ve odasına çekilir", val: 1}] },
+            { tag: "ANNE | 3. İLGİ ALANI", text: "Serbest zamanlarında kendi kendine en çok neyle uğraşır?", options: [{txt: "Oyun, ekran ve teknoloji", val: 3}, {txt: "Resim, müzik, el sanatları", val: 2}, {txt: "Spor, hareketli aktiviteler", val: 1}, {txt: "Kitap okuma ve araştırma", val: 4}] },
+            { tag: "ANNE | 4. İLETİŞİM", text: "Sizinle gününü veya hislerini ne kadar paylaşır?", options: [{txt: "Sadece ben sorarsam kısa yanıt verir", val: 1}, {txt: "Detaylıca her şeyi anlatır", val: 3}, {txt: "Genelde duygularını saklar", val: 2}, {txt: "Sorun çıkınca paylaşır", val: 2}] },
+            { tag: "ANNE | 5. DÜZEN", text: "Odasının ve çalışma masasının düzeni nasıldır?", options: [{txt: "Aşırı dağınıktır, müdahale gerekir", val: 1}, {txt: "Kendi içinde bir karmaşası vardır", val: 2}, {txt: "Düzenlidir, aradığını bulur", val: 3}, {txt: "Periyodik olarak toplar", val: 2}] },
+            { tag: "ANNE | 6. DERS YATKINLIĞI", text: "Evde çalışırken en çok hangi derste zorlandığını gözlemliyorsunuz?", options: [{txt: "Matematik ve Mantık dersleri", val: 1}, {txt: "Sözel ve Ezber dersleri", val: 2}, {txt: "Yabancı Diller", val: 3}, {txt: "Fen ve Uygulamalı dersler", val: 2}] },
+            { tag: "ANNE | 7. MOTİVASYON", text: "Çocuğunuzu en çok ne motive eder?", options: [{txt: "Maddi ödül veya izinler", val: 1}, {txt: "Takdir edilmek ve övülmek", val: 3}, {txt: "Kendi başarısını görmek", val: 4}, {txt: "Arkadaşlarıyla yarışmak", val: 2}] },
+            { tag: "ANNE | 8. STRES", text: "Sınav öncesi veya zorlu durumlarda stresi nasıl dışa vurur?", options: [{txt: "Karnı/başı ağrır, fizikselleşir", val: 1}, {txt: "Aşırı sinirli ve tepkili olur", val: 2}, {txt: "İçine kapanır ve sessizleşir", val: 2}, {txt: "Sakin kalır, etkilenmez görünür", val: 3}] },
+            { tag: "ANNE | 9. KURALLAR", text: "Evdeki kurallara ve sınırlara uyumu nasıldır?", options: [{txt: "Sürekli kuralları esnetmeye çalışır", val: 1}, {txt: "Hatırlatılınca uyum sağlar", val: 2}, {txt: "Kurallara harfiyen uyar", val: 3}, {txt: "Kendi kurallarını koymak ister", val: 1}] },
+            { tag: "ANNE | 10. SOSYALLEŞME", text: "Arkadaş ilişkilerinde nasıl bir role sahiptir?", options: [{txt: "Liderdir, yönlendirir", val: 3}, {txt: "Uyumlu bir takipçidir", val: 2}, {txt: "Bireysel kalmayı tercih eder", val: 1}, {txt: "Seçicidir, az arkadaşı vardır", val: 2}] },
+            { tag: "ANNE | 11. YETENEK", text: "Pratik zekasını ve becerilerini en çok nerede görürsünüz?", options: [{txt: "Problem çözmede ve mantıkta", val: 4}, {txt: "Yaratıcı tasarım ve çizimde", val: 3}, {txt: "İkna kabiliyeti ve konuşmada", val: 2}, {txt: "El becerileri ve tamiratta", val: 3}] },
+            { tag: "ANNE | 12. ÖZGÜVEN", text: "Yeni bir ortama veya göreve başlarken özgüveni nasıldır?", options: [{txt: "Çok çekingendir", val: 1}, {txt: "Temkinlidir, izler", val: 2}, {txt: "Kendinden emindir", val: 4}, {txt: "Aşırı cesurdur", val: 3}] }
+        ],
+        baba: [
+            { tag: "BABA | 1. DİSİPLİN", text: "Çocuğunuz çalışma disiplini açısından ne durumdadır?", options: [{txt: "Sürekli takip ve baskı gerektirir", val: 1}, {txt: "Hatırlatmalarla idare eder", val: 2}, {txt: "Kendi planını yapıp uygular", val: 4}, {txt: "Son günlerde sıkışarak çalışır", val: 2}] },
+            { tag: "BABA | 2. GELECEK BİLİNCİ", text: "Gelecek, meslek ve kariyer hakkında bilinci ne düzeydedir?", options: [{txt: "Henüz hiç düşünmüyor", val: 1}, {txt: "Popüler mesleklere özeniyor", val: 2}, {txt: "Belirli bir hedefi var ve kararlı", val: 4}, {txt: "Sık sık fikir değiştiriyor", val: 2}] },
+            { tag: "BABA | 3. PROBLEM ÇÖZME", text: "Zor bir sorunla karşılaştığında pes etme eğilimi nasıldır?", options: [{txt: "Çabuk pes eder ve yardım ister", val: 1}, {txt: "Denemeler yapar, hırslanır", val: 3}, {txt: "Sorundan kaçınır", val: 1}, {txt: "Farklı yollar arar", val: 4}] },
+            { tag: "BABA | 4. ZAMAN YÖNETİMİ", text: "Zamanını (oyun, ders, dinlenme) ayarlama becerisi nasıl?", options: [{txt: "Zaman mefhumu zayıftır", val: 1}, {txt: "Uyarılara ihtiyaç duyar", val: 2}, {txt: "Planına büyük oranda uyar", val: 3}, {txt: "Gece geç saatlerde çalışmayı sever", val: 2}] },
+            { tag: "BABA | 5. TEKNOLOJİ KULLANIMI", text: "Teknolojiyi kullanma biçimi daha çok hangisidir?", options: [{txt: "Tüketim (Sadece içerik izleme)", val: 1}, {txt: "Oyun ve eğlence", val: 2}, {txt: "Üretim (Kodlama, araştırma, tasarım)", val: 4}, {txt: "Sosyal iletişim", val: 2}] },
+            { tag: "BABA | 6. OTORİTE İLE İLİŞKİ", text: "Okulda öğretmenleri veya otorite figürleriyle iletişimi nasıldır?", options: [{txt: "Mesafeli ve çekingen", val: 2}, {txt: "Saygılı ve uyumlu", val: 3}, {txt: "Sorgulayıcı ve itiraz eden", val: 1}, {txt: "Çok rahat ve arkadaşça", val: 2}] },
+            { tag: "BABA | 7. SIKILMA EŞİĞİ", text: "Rutin veya tekrarlayan işlerde sabrı nasıldır?", options: [{txt: "Çok çabuk sıkılır", val: 1}, {txt: "Biraz sabreder", val: 2}, {txt: "Sonuna kadar bitirir", val: 4}, {txt: "Detaylarda kaybolur", val: 3}] },
+            { tag: "BABA | 8. FİNANS VE KAYNAK", text: "Sorumluluk ve eşya kullanım bilinci ne düzeyde?", options: [{txt: "Hor kullanır, çabuk yıpratır", val: 1}, {txt: "Normal düzeyde korur", val: 2}, {txt: "Aşırı özenli ve sahiplenicidir", val: 3}, {txt: "Tutumludur, mantıklı ister", val: 4}] },
+            { tag: "BABA | 9. BAŞARI ALGISI", text: "Ona göre başarılı olmak neyi ifade ediyor?", options: [{txt: "Yüksek not almayı", val: 2}, {txt: "Arkadaşlarına üstünlük sağlamayı", val: 1}, {txt: "Yeni şeyler öğrenip kendisini geliştirmeyi", val: 4}, {txt: "Ailesini gururlandırmayı", val: 3}] },
+            { tag: "BABA | 10. LİDERLİK", text: "Grup çalışmalarında takındığı tavır nedir?", options: [{txt: "Grubu yönetmek ister", val: 3}, {txt: "Görevini yapıp çekilir", val: 2}, {txt: "Sorumluluktan kaçınır", val: 1}, {txt: "Fikir verici / vizyonerdir", val: 4}] },
+            { tag: "BABA | 11. FİZİKSEL ÇALIŞMA", text: "Ders çalışırken duruşu ve stili nasıldır?", options: [{txt: "Yatarak / uzanarak", val: 1}, {txt: "Masa başında sabit", val: 3}, {txt: "Müzik dinleyerek / gezinerek", val: 2}, {txt: "Sürekli yer değiştirerek", val: 1}] },
+            { tag: "BABA | 12. ELEŞTİRİYE TEPKİ", text: "Eksikleri veya hataları söylendiğinde nasıl tepki verir?", options: [{txt: "Savunmaya geçer ve tartışır", val: 1}, {txt: "Sessiz kalır, alınır", val: 2}, {txt: "Mantıklıysa kabul eder", val: 4}, {txt: "Dikkate almaz görünür", val: 1}] }
+        ],
+        ogrenci: [
+            { tag: "ÖĞRENCİ | 1. MOTİVASYON", text: "Ders çalışırken en çok hangisi seni harekete geçirir?", options: [{txt: "İlgimi çeken bir konu olması", val: 4}, {txt: "Yüksek not alıp başarılı görünmek", val: 3}, {txt: "Ailemin baskısı veya beklentisi", val: 1}, {txt: "Gelecekteki hedefim ve hayallerim", val: 4}] },
+            { tag: "ÖĞRENCİ | 2. DERS STİLİ", text: "Anlatılan bir konuyu en kolay nasıl anlarsın?", options: [{txt: "Görsel ve grafiklerle görünce", val: 3}, {txt: "Dinleyerek ve mantığını kavrayınca", val: 4}, {txt: "Kendim yazıp özet çıkarınca", val: 3}, {txt: "Soru çözerek / uygulayarak", val: 3}] },
+            { tag: "ÖĞRENCİ | 3. TUTKU ALANI", text: "Sana özel bir okul kulübü kurulsa hangisinin başkanı olmak isterdin?", options: [{txt: "🚀 Yapay Zeka, Yazılım ve Robotik", val: 4}, {txt: "🎨 Dijital Sanat ve Tasarım", val: 3}, {txt: "📊 Borsa, Girişimcilik ve Finans", val: 4}, {txt: "⚽ Spor ve Doğa Maceraları", val: 2}] },
+            { tag: "ÖĞRENCİ | 4. ENERJİ", text: "Günün hangi saatinde zihnin daha açık ve enerjik hissediyorsun?", options: [{txt: "Sabah erken saatlerde", val: 3}, {txt: "Öğleden sonra", val: 2}, {txt: "Akşam saatlerinde", val: 2}, {txt: "Gece herkes uyuyunca", val: 3}] },
+            { tag: "ÖĞRENCİ | 5. AİLE ALGISI", text: "Ailenin derslerin konusundaki tutumunu nasıl görüyorsun?", options: [{txt: "Çok baskıcı ve bunaltıcı", val: 1}, {txt: "Destekleyici ve anlayışlı", val: 4}, {txt: "İlgisiz veya yetersiz", val: 2}, {txt: "Sadece nota odaklı", val: 1}] },
+            { tag: "ÖĞRENCİ | 6. HEDEF SIKLIĞI", text: "Bir çalışma planı yaptığında buna ne kadar sadık kalabiliyorsun?", options: [{txt: "İlk günden bozuluyor", val: 1}, {txt: "Birkaç gün uyabiliyorum", val: 2}, {txt: "Genellikle sonuna kadar uyarım", val: 4}, {txt: "Hiç plan yapmam, kafama göre giderim", val: 1}] },
+            { tag: "ÖĞRENCİ | 7. ZOR KONULAR", text: "Çok zor bir soru veya konuyla karşılaşınca ne yaparsın?", options: [{txt: "Hemen pes edip bırakırım", val: 1}, {txt: "İnternetten veya AI'dan bakarım", val: 3}, {txt: "İnat eder çözene kadar uğraşırım", val: 4}, {txt: "Öğretmene sorarım", val: 3}] },
+            { tag: "ÖĞRENCİ | 8. ORTAM", text: "Nasıl bir ortamda daha verimli çalışırsın?", options: [{txt: "Tamamen sessiz ve yalnız", val: 4}, {txt: "Kafede veya hafif müzikle", val: 3}, {txt: "Arkadaş grubuyla birlikte", val: 2}, {txt: "Gece lambası altında tek başına", val: 3}] },
+            { tag: "ÖĞRENCİ | 9. DERS İLGİSİ", text: "Okulda seni en çok heyecanlandıran alan hangisidir?", options: [{txt: "Sayısal ve Kodlama", val: 4}, {txt: "Sözel ve Tarih/Edebiyat", val: 3}, {txt: "Sanat ve Yaratıcı Sanatlar", val: 3}, {txt: "Beden ve Hareket", val: 2}] },
+            { tag: "ÖĞRENCİ | 10. GELECEK KAYGISI", text: "Sınavlar ve gelecek hakkında ne hissediyorsun?", options: [{txt: "Çok kaygılıyım, korkuyorum", val: 1}, {txt: "Rahatım, hallolur diyorum", val: 2}, {txt: "Planlıyım, ne yapacağımı biliyorum", val: 4}, {txt: "Bazen stres yapıyorum", val: 2}] },
+            { tag: "ÖĞRENCİ | 11. BAŞARI HİSSİ", text: "Bir işte başardığını en çok ne zaman hissedersin?", options: [{txt: "90-100 not aldığımda", val: 3}, {txt: "Bir mantığı çözüp kavradığımda", val: 4}, {txt: "Tebrik edildiğimde", val: 2}, {txt: "Kendi ürünümü/kodumu ortaya koyduğumda", val: 4}] },
+            { tag: "ÖĞRENCİ | 12. ÖZGÜR OLMA", text: "Sence ders çalışırken seni en çok ne engelliyor?", options: [{txt: "Telefon ve bildirimler", val: 1}, {txt: "Sıkıcı ve ezberci olması", val: 2}, {txt: "Yorgunluk ve uyku", val: 2}, {txt: "Evdeki ses ve gürültü", val: 1}] }
+        ]
+    };
+
+    function getChildName() {
+        var val = document.getElementById('childNameInput').value.trim();
+        return val ? val : "Çocuğunuz";
+    }
+
+    function updatePricingUI() {
+        activeKidsCount = parseInt(document.getElementById('activeAnalyzeCount').value);
+
+        var baseSingle = 350;
+        var baseSub = 250;
+
+        var totalSub = baseSub;
+        if (activeKidsCount > 1) {
+            totalSub += (activeKidsCount - 1) * (baseSub * 0.75);
+        }
+
+        document.getElementById('valSingle').innerText = '₺' + (baseSingle * activeKidsCount);
+        document.getElementById('valSub').innerHTML = '₺' + totalSub.toFixed(0) + ' <span style="font-size:0.75rem; color:var(--text-muted);">/ ay</span>';
+
+        if (activeKidsCount > 1) {
+            document.getElementById('discountInfoBadge').innerText = activeKidsCount + ' Çocuk (%25 Ek Kardeş İndirimi)';
+            document.getElementById('childTabBar').classList.remove('hidden');
+        } else {
+            document.getElementById('discountInfoBadge').innerText = '1. Çocuk Standart';
+            document.getElementById('childTabBar').classList.add('hidden');
+        }
+    }
+
+    document.getElementById('activeAnalyzeCount').onchange = updatePricingUI;
+
+    var roleBtns = document.querySelectorAll('#parentRoleGroup .role-btn');
+    roleBtns.forEach(function(btn) {
+        btn.onclick = function() {
+            roleBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            parentMode = btn.getAttribute('data-mode');
+
+            if (parentMode === 'single') {
+                document.getElementById('cardBaba').style.display = 'none';
+                document.getElementById('titleAnne').innerText = "Ebeveyn Modülü";
+            } else {
+                document.getElementById('cardBaba').style.display = 'block';
+                document.getElementById('titleAnne').innerText = "Anne Modülü";
+            }
+        };
+    });
+
+    document.getElementById('btnStartFlow').onclick = function() {
+        document.getElementById('heroSection').classList.add('hidden');
+        document.getElementById('portalSection').classList.remove('hidden');
+        updatePricingUI();
+    };
+
+    document.getElementById('cardAnne').onclick = function() { activeModule = 'anne'; qIndex = 0; startQuiz(); };
+    document.getElementById('cardBaba').onclick = function() { activeModule = 'baba'; qIndex = 0; startQuiz(); };
+    document.getElementById('cardOgrenci').onclick = function() {
+        if (parentMode === 'both' && (!statusState.anneDone || !statusState.babaDone)) {
+            alert("Lütfen önce Anne ve Baba modüllerini tamamlayınız."); return;
+        }
+        if (parentMode === 'single' && !statusState.anneDone) {
+            alert("Lütfen önce Ebeveyn modülünü tamamlayınız."); return;
+        }
+        activeModule = 'ogrenci'; qIndex = 0; startQuiz();
+    };
+
+    function startQuiz() {
+        document.getElementById('portalSection').classList.add('hidden');
+        document.getElementById('quizSection').classList.remove('hidden');
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        var list = questionBank[activeModule];
+        if (qIndex >= list.length) { finishModule(); return; }
+
+        var childName = getChildName();
+        var q = list[qIndex];
+        document.getElementById('progressFill').style.width = (((qIndex) / list.length) * 100) + '%';
+        
+        var displayTag = q.tag.replace("ANNE", "ANNE (" + childName + ")").replace("BABA", "BABA (" + childName + ")").replace("ÖĞRENCİ", childName.toUpperCase());
+        document.getElementById('qTag').innerText = displayTag + " (" + (qIndex + 1) + "/12)";
+        document.getElementById('qTitle').innerText = q.text.replace("Çocuğunuz", childName);
+
+        var container = document.getElementById('qOptions');
+        container.innerHTML = '';
+        q.options.forEach(function(optObj, idx) {
+            var b = document.createElement('button');
+            b.type = 'button'; b.className = 'option-btn';
+            b.innerHTML = '<strong>' + String.fromCharCode(65 + idx) + ')</strong> ' + optObj.txt;
+            b.onclick = function() { 
+                userAnswers[activeModule][qIndex] = optObj.val;
+                qIndex++; renderQuiz(); 
+            };
+            container.appendChild(b);
+        });
+    }
+
+    function finishModule() {
+        document.getElementById('quizSection').classList.add('hidden');
+        document.getElementById('portalSection').classList.remove('hidden');
+
+        if (activeModule === 'anne') {
+            statusState.anneDone = true;
+            document.getElementById('statusAnne').innerText = "TAMAMLANDI ✓";
+            document.getElementById('statusAnne').className = "status-pill pill-done";
+            document.getElementById('cardAnne').classList.add('completed');
+        } else if (activeModule === 'baba') {
+            statusState.babaDone = true;
+            document.getElementById('statusBaba').innerText = "TAMAMLANDI ✓";
+            document.getElementById('statusBaba').className = "status-pill pill-done";
+            document.getElementById('cardBaba').classList.add('completed');
+        } else if (activeModule === 'ogrenci') {
+            statusState.ogrenciDone = true;
+            document.getElementById('statusOgrenci').innerText = "TAMAMLANDI ✓";
+            document.getElementById('statusOgrenci').className = "status-pill pill-done";
+            document.getElementById('cardOgrenci').classList.add('completed');
+        }
+
+        var canUnlockStudent = (parentMode === 'both' && statusState.anneDone && statusState.babaDone) || (parentMode === 'single' && statusState.anneDone);
+        if (canUnlockStudent) {
+            document.getElementById('cardOgrenci').classList.remove('locked');
+            if (!statusState.ogrenciDone) {
+                document.getElementById('statusOgrenci').innerText = "HAZIR";
+                document.getElementById('statusOgrenci').className = "status-pill pill-pending";
+            }
+        }
+
+        if (statusState.ogrenciDone) {
+            calculateRealResults();
+            document.getElementById('teaserResultCard').classList.remove('hidden');
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+    }
+
+    // MATEMATİKSEL UYUM, MİZAÇ ÖZETİ VE HESAPLAMA MOTORU
+    function calculateRealResults() {
+        var childName = getChildName();
+        var age = document.getElementById('childAgeInput').value || "13";
+        var grade = document.getElementById('childGradeInput').value;
+
+        var anneSum = userAnswers.anne.reduce((a, b) => a + (typeof b === 'number' ? b : 2), 0);
+        var babaSum = parentMode === 'both' ? userAnswers.baba.reduce((a, b) => a + (typeof b === 'number' ? b : 2), 0) : anneSum;
+        var ogrenciSum = userAnswers.ogrenci.reduce((a, b) => a + (typeof b === 'number' ? b : 2), 0);
+
+        var parentAvg = (anneSum + babaSum) / (parentMode === 'both' ? 2 : 1);
+        
+        var diff = Math.abs(parentAvg - ogrenciSum);
+        var maxPossibleDiff = 36; 
+        var conflictPercentage = Math.min(Math.round((diff / maxPossibleDiff) * 100) + 15, 85);
+        var matchPercentage = 100 - conflictPercentage;
+
+        // 1. ÖDEME ÖNCESİ ÖZET "AYNA" VERİLERİ (TEASER)
+        document.getElementById('teaserHeaderTitle').innerText = "🪞 " + childName + " İçin Teşhis Tamamlandı! Mizaç Özet Aynanız Hazır.";
+        document.getElementById('teaserTemperamentType').innerText = "🔍 Analitik & Keşifçi Mizaç";
+        document.getElementById('calculatedConflictText').innerText = "⚖️ %" + matchPercentage + " Uyum (Fark: %" + conflictPercentage + ")";
+        
+        var subjectText = "📊 Girişimcilik & Borsa";
+        if(ogrenciSum > 32) {
+            subjectText = "🚀 Yazılım, Yapay Zeka & Mantık";
+        } else if(ogrenciSum > 24) {
+            subjectText = "🎨 Dijital Sanat & Tasarım";
+        }
+        document.getElementById('calculatedSubjectText').innerText = subjectText;
+
+        // 2. TAM RAPOR İÇERİKLERİ
+        document.getElementById('reportMainTitle').innerText = childName + " - Edumindnest™ Mizaç ve Gelişim Raporu";
+        document.getElementById('reportMainSub').innerText = age + " Yaş | " + grade + " | Sistem Kayıt Kodu: #EMN-" + Math.floor(100000 + Math.random() * 900000);
+        
+        document.getElementById('reportTemperamentDesc').innerText = childName + " için verilen yanıtlar incelendiğinde; çocuğunuzun Analitik ve Keşif Odaklı mizaç yapısı ön plana çıkmaktadır. Ezberci eğitim sistemine karşı direnç gösterebilir; ancak soyut kavramları görselleştirip projelere dönüştürdüğünde yüksek odaklanma performansı sergilemektedir.";
+        
+        document.getElementById('reportMatchScoreText').innerText = "%" + matchPercentage + " Uyum";
+        document.getElementById('reportMatchBar').style.width = matchPercentage + "%";
+
+        document.getElementById('reportConflictDesc').innerText = "Anne ve babanın " + childName + " üzerindeki disiplin beklentisi ile çocuğun kendi potansiyel algısı arasında %" + conflictPercentage + " oranında bir algı farkı tespit edildi. Sizin 'ders çalışmıyor' olarak gördüğünüz zaman dilimlerinde " + childName + " aslında zihinsel kurgular geliştirmekte fakat çalışma masasına oturma rutininde zorlanmaktadır.";
+        
+        document.getElementById('reportSubjectList').innerText = subjectText;
+
+        document.getElementById('reportActionPlanList').innerHTML = 
+            "<li><strong>Hafta 1-4:</strong> " + childName + " için evdeki ders çalışma sürelerini 25 dk çalışma + 5 dk mola (Pomodoro) düzenine geçirin.</li>" +
+            "<li><strong>Hafta 5-12:</strong> " + childName + " öğrencimizin ilgi duyduğu derslerde proje bazlı küçük hedefler koyun.</li>" +
+            "<li><strong>Abonelik Avantajı:</strong> " + childName + " adına AI Öğrenci Koçu paneliniz aktif edilmiştir. 7/24 haftalık ödev takibi yapabilirsiniz.</li>";
+
+        // 3. SİSTEM İÇİ GEÇMİŞ RAPORLAR LİSTESİNİ DOLDUR
+        var today = new Date().toLocaleDateString('tr-TR');
+        document.getElementById('historyReportsList').innerHTML = `
+            <div class="history-card">
+                <div>
+                    <strong style="color:#fff;">Rapor #1 (İlk Teşhis)</strong>
+                    <div style="font-size:0.78rem; color:var(--text-muted);">Tarih: 01 Mart 2026 | Uyum: %60</div>
+                </div>
+                <span class="discount-badge" style="background:rgba(59,130,246,0.2); color:#60a5fa;">Tamamlandı</span>
+            </div>
+            <div class="history-card" style="border-color:var(--success);">
+                <div>
+                    <strong style="color:#fff;">Rapor #2 (Güncel Rapor)</strong>
+                    <div style="font-size:0.78rem; color:var(--text-muted);">Tarih: ${today} | Uyum: %${matchPercentage}</div>
+                </div>
+                <span class="discount-badge">Aktif Rapor</span>
+            </div>
+        `;
+
+        document.getElementById('cmpMatchNow').innerText = "%" + matchPercentage;
+        document.getElementById('cmpSubjectNow').innerText = subjectText;
+    }
+
+    // PAKET SEÇİMİ
+    document.getElementById('pkgSingle').onclick = function() {
+        document.getElementById('pkgSingle').classList.add('selected');
+        document.getElementById('pkgSub').classList.remove('selected');
+    };
+    document.getElementById('pkgSub').onclick = function() {
+        document.getElementById('pkgSub').classList.add('selected');
+        document.getElementById('pkgSingle').classList.remove('selected');
+    };
+
+    // ÖDEME ADIMINA GEÇİŞ (MODÜLDEN AYRI SAYFAYA İLERLEME)
+    document.getElementById('btnGoToCheckoutPage').onclick = function() {
+        document.getElementById('teaserResultCard').classList.add('hidden');
+        document.getElementById('checkoutPageSection').classList.remove('hidden');
+        window.scrollTo({ top: document.getElementById('checkoutPageSection').offsetTop, behavior: 'smooth' });
+    };
+
+    // ÖDEMEYİ VE HESAP KAYDINI ONAYLAMA
+    document.getElementById('btnCompletePayment').onclick = function() {
+        var email = document.getElementById('regEmail').value;
+        if (!email) { alert("Lütfen hesabınız için e-posta giriniz."); return; }
+        
+        alert("Hesabınız (" + email + ") başarıyla oluşturuldu ve raporunuz profilinize kaydedildi!");
+        
+        document.getElementById('checkoutPageSection').classList.add('hidden');
+        document.getElementById('fullReportSection').classList.remove('hidden');
+        window.scrollTo({ top: document.getElementById('fullReportSection').offsetTop, behavior: 'smooth' });
+    };
+
+    // GEÇMİŞ RAPORLARI KARŞILAŞTIRMA BUTONU
+    document.getElementById('btnCompareReports').onclick = function() {
+        var view = document.getElementById('compareResultView');
+        if (view.classList.contains('hidden')) {
+            view.classList.remove('hidden');
+        } else {
+            view.classList.add('hidden');
+        }
+    };
+
+});
+</script>
+
+</body>
+</html>
